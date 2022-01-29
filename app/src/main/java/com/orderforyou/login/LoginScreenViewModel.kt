@@ -3,10 +3,15 @@ package com.orderforyou.login
 import android.content.Context
 import android.util.Patterns
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginScreenViewModel {
 
+@HiltViewModel
+class LoginScreenViewModel @Inject constructor(
 
+): ViewModel(){
 
 
     fun login (email:String, password: String, context: Context): Boolean{

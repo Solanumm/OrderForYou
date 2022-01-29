@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -24,13 +25,20 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.orderforyou.R
+import com.orderforyou.navigation.Screen
 
 @Composable
 fun LoginScreen(
+    navController: NavController
 
 
 ) {
+    val viewModel: LoginScreenViewModel = hiltViewModel()
+    val context = LocalContext.current
     var email = rememberSaveable { mutableStateOf("") }
 
     var password = rememberSaveable { mutableStateOf("") }
@@ -124,7 +132,14 @@ fun LoginScreen(
                                     .padding(5.dp),
                                 shape = RoundedCornerShape(10.dp),
 
-                                onClick = { /*TODO*/ }) {
+                                onClick = {
+                                    if (viewModel.login(email.value, password.value, context )) {
+                                        navController.navigate (
+                                            Screen.Home.route
+                                                )
+                                    }
+
+                                }) {
 
                                 Icon(imageVector = Icons.Filled.Login, contentDescription = "Login")
                                 Text(text = "Sign in")
@@ -153,7 +168,13 @@ fun LoginScreen(
 
 
                             },
-                                onClick = {/* TODO */ }
+                                onClick = {
+                                    navController.navigate(
+                                        route = Screen.Register.route
+                                    )
+
+
+                                }
                             )
 
 
