@@ -30,7 +30,7 @@ val Typography = Typography(
         fontWeight = FontWeight.Bold,
         fontSize = 22.sp
             ),
-    h4 = TextStyle (
+    h2 = TextStyle (
         fontFamily = Monserrat,
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp

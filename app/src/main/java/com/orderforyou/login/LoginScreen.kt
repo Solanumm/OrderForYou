@@ -5,22 +5,30 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Login
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.orderforyou.R
+import com.orderforyou.components.TransaprentTextField
 import com.orderforyou.navigation.Screen
 
 @Composable
@@ -39,7 +48,9 @@ fun LoginScreen(
 ) {
     val viewModel: LoginScreenViewModel = hiltViewModel()
     val context = LocalContext.current
-    var email = rememberSaveable { mutableStateOf("") }
+    val email = rememberSaveable { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
+
 
     var password = rememberSaveable { mutableStateOf("") }
     Box(
@@ -90,33 +101,53 @@ fun LoginScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
 
-                            OutlinedTextField(
-                                value = email.value,
-                                onValueChange = { email.value = it },
-                                label = { Text("email", style = MaterialTheme.typography.body1) },
-                                placeholder = {
-                                    Text(
-                                        text = "Email",
-                                        style = MaterialTheme.typography.body1
-                                    )
-                                }
+                            TransaprentTextField(
+                                textFieldValue = email,
+                                textlabel = "Email",
+                                keyboardType = KeyboardType.Email,
+                                keyboardActions = KeyboardActions(
+                                    onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }
+                                ),
+                                imeAction = ImeAction.Next
                             )
 
-                            OutlinedTextField(
-                                value = password.value,
-                                onValueChange = { password.value = it },
-                                label = {
-                                    Text(
-                                        "password",
-                                        style = MaterialTheme.typography.body1
-                                    )
+                            var passwordVisibility by remember { mutableStateOf(false) }
+
+                            TransaprentTextField(
+                                textFieldValue = password,
+                                textlabel = "password",
+                                keyboardType = KeyboardType.Email,
+                                keyboardActions = KeyboardActions(
+                                    onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }
+                                ),
+                                imeAction = ImeAction.Next,
+                                trailingIcon = {
+                                    IconButton(onClick = {
+                                        passwordVisibility = !passwordVisibility
+                                    }
+                                    ) {
+                                        Icon(
+                                            imageVector = if (passwordVisibility) {
+                                                Icons.Default.Visibility
+
+                                            } else {
+                                                Icons.Default.VisibilityOff
+                                            },
+                                            contentDescription = "Toggle Password Icon"
+                                        )
+
+                                    }
                                 },
-                                placeholder = {
-                                    Text(
-                                        text = "Password",
-                                        style = MaterialTheme.typography.body1
-                                    )
+                                visualTransformation = if (passwordVisibility) {
+                                    VisualTransformation.None
+                                } else {
+                                    PasswordVisualTransformation()
                                 }
+
                             )
                         }
 

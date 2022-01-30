@@ -31,6 +31,15 @@ class LoginScreenViewModel @Inject constructor(
             ).show()
             return false
         }
+
+        if (email.isNullOrBlank() || password != "admin") {
+            Toast.makeText(
+                context,
+                "Contraseña incorrecta",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
         return email == "admin@gmail.com" && password == "admin"
 
 
