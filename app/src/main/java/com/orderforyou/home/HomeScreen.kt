@@ -75,7 +75,9 @@ fun HomeScreen() {
                     backgroundColor = Color.Yellow,
                     onClick = {
                           //TODO
-                    }) {
+                    },
+                ) {
+
                     Icon(
                         imageVector = Icons.Filled.ShoppingCart,
                         contentDescription = "Shopping Cart",
